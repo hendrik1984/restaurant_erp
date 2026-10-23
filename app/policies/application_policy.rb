@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -45,7 +43,7 @@ class ApplicationPolicy
   def manager?
     user&.manager?
   end
-  
+
   def staff?
     user&.staff?
   end

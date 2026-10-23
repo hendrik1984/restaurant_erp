@@ -14,5 +14,4 @@ class RolePolicy < ApplicationPolicy
   def update?
     admin?
   end
-  
 end

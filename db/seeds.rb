@@ -7,7 +7,7 @@ roles = {
   "Customer" => "Registered customer — order via web, view history."
 }.map do |name, description|
   Role.find_or_create_by!(name: name) { |r| r.description = description }
-end.to_h { |r| [r.name, r] }
+end.to_h { |r| [ r.name, r ] }
 
 # Permissions
 permission_defs = [
@@ -23,7 +23,7 @@ permission_defs = [
 
 permissions = permission_defs.map do |mod, action|
   Permission.find_or_create_by!(module: mod, action: action)
-end.to_h { |p| [p.key, p] }
+end.to_h { |p|[ p.key, p ] }
 
 # Role → permission matrix
 matrix = {

@@ -5,7 +5,7 @@ class Shift < ApplicationRecord
   validate :clock_out_after_clock_in
   validate :no_overlapping_open_shift, on: :create
 
-  scope :open, -> {where(clock_out: nil)}
+  scope :open, -> { where(clock_out: nil) }
 
   def open?
     clock_out.nil?

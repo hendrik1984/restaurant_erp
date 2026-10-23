@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, path: "auth", path_names: { sign_in: "login", sign_out: "logout"}
+  devise_for :users, path: "auth", path_names: { sign_in: "login", sign_out: "logout" }
   get "pages/home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -20,5 +20,4 @@ Rails.application.routes.draw do
     post "login", to: "sessions#create"
     delete "logout", to: "sessions#destroy"
   end
-  
 end

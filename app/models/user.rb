@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :permissions, through: :role_permissions
   has_many :shifts, dependent: :destroy
 
-  enum :status, {active: 0, inactive: 1}
+  enum :status, { active: 0, inactive: 1 }
 
   validates :name, presence: true
   validates :email, presence: true, if: :customer?
@@ -15,7 +15,7 @@ class User < ApplicationRecord
   validate :email_format_if_customer
 
   scope :staff_members, -> { where.not(role: Role.find_by(name: "Customer")) }
-  
+
   def customer?
     puts role&.name
     role&.name == "Customer"
@@ -44,7 +44,7 @@ class User < ApplicationRecord
   def set_pin(raw_pin)
     self.pin_digest = BCrypt::Password.create(raw_pin)
   end
-  
+
   def valid_pin?(raw_pin)
     return false if pin_digest.blank?
     BCrypt::Password.new(pin_digest) == raw_pin
