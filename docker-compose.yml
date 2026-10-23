@@ -1,0 +1,30 @@
+services:
+  web:
+    build: .
+    container_name: restaurant_erp_web
+    depends_on: [db, redis]
+    ports: ["3000:3000"]
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/restaurant_erp_development
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/rails
+      # - bundle:/usr/local/bundle
+  db:
+    image: postgres:18
+    container_name: restaurant_erp_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    
+  redis:
+    image: redis:7-alpine
+    container_name: restaurant_erp_redis
+
+volumes:
+  # bundle:
+  postgres_data:
