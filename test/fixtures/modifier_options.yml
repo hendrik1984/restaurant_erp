@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  modifier_group: one
+  name: MyString
+  price_delta: 9.99
+  available: false
+  position: 1
+
+two:
+  modifier_group: two
+  name: MyString
+  price_delta: 9.99
+  available: false
+  position: 1

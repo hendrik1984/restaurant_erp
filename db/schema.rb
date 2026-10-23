@@ -10,9 +10,71 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_092827) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_103717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "banners", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "image_url"
+    t.string "link_url"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.boolean "active", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
+    t.index ["position"], name: "index_categories_on_position"
+  end
+
+  create_table "menu_items", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.boolean "available", default: true, null: false
+    t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0"
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["available"], name: "index_menu_items_on_available"
+    t.index ["category_id", "position"], name: "index_menu_items_on_category_id_and_position"
+    t.index ["category_id"], name: "index_menu_items_on_category_id"
+  end
+
+  create_table "modifier_groups", force: :cascade do |t|
+    t.bigint "menu_item_id", null: false
+    t.string "name", null: false
+    t.integer "min_select", default: 0, null: false
+    t.integer "max_select", default: 1, null: false
+    t.boolean "required", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["menu_item_id", "position"], name: "index_modifier_groups_on_menu_item_id_and_position"
+    t.index ["menu_item_id"], name: "index_modifier_groups_on_menu_item_id"
+  end
+
+  create_table "modifier_options", force: :cascade do |t|
+    t.bigint "modifier_group_id", null: false
+    t.string "name", null: false
+    t.decimal "price_delta", precision: 10, scale: 2, default: "0.0", null: false
+    t.boolean "available", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["modifier_group_id", "position"], name: "index_modifier_options_on_modifier_group_id_and_position"
+    t.index ["modifier_group_id"], name: "index_modifier_options_on_modifier_group_id"
+  end
 
   create_table "permissions", force: :cascade do |t|
     t.string "module", null: false
@@ -74,6 +136,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_092827) do
     t.index ["username"], name: "index_users_on_username", unique: true, where: "(username IS NOT NULL)"
   end
 
+  add_foreign_key "menu_items", "categories"
+  add_foreign_key "modifier_groups", "menu_items"
+  add_foreign_key "modifier_options", "modifier_groups"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "shifts", "users"
